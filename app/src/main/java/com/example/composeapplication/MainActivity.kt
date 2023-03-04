@@ -38,7 +38,7 @@ class MainActivity : ComponentActivity() {
                 // A surface container using the 'background' color from the theme
                 Surface(
                     modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colors.background
+                    color = Color.Gray
                 ) {
 
                     
@@ -47,8 +47,6 @@ class MainActivity : ComponentActivity() {
                     //add  the main entry   to populate  in the main view
                     MainEntry(productList = productsViewModel.productsListResponse)
                     productsViewModel.getProductList()
-
-
 
                 }
             }
@@ -81,7 +79,7 @@ fun MainEntry(productList: List<ProductList>){
 
         LazyColumn(modifier = Modifier
             .fillMaxWidth()
-            .background(Color.White)
+            .background(Color.Gray)
             .weight(1f),
         ){
 
@@ -113,8 +111,9 @@ fun DefaultPreview() {
         //Preview the application
 
         //MainEntry()
-        val products=ProductList(2,"Sugar",22.0,"good sweater","")
-    ProductsContainer(productList = products)
+        // This is meant  as a preview of the products container
+        //val products=ProductList(2,"Sugar",22.0,"good sweater","")
+   // ProductsContainer(productList = products)
 
     }
 }
