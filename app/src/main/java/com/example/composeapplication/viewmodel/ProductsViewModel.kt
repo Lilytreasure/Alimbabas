@@ -1,5 +1,7 @@
 package com.example.composeapplication.viewmodel
 
+import android.content.Context
+import android.widget.Toast
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.*
 import androidx.compose.runtime.setValue
@@ -9,7 +11,9 @@ import com.example.composeapplication.data.ProductList
 import com.example.composeapplication.network.productsListApi
 import kotlinx.coroutines.launch
 
+
 class ProductsViewModel: ViewModel() {
+
 
     //implement the products view model
     var productsListResponse: List<ProductList>  by mutableStateOf(listOf())
@@ -37,6 +41,8 @@ class ProductsViewModel: ViewModel() {
                 //when  the operation  fails
 
                 errorMessage=e.message.toString()
+
+
 
             }
 
