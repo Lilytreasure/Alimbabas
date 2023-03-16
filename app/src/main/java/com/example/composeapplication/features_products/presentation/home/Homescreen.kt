@@ -37,8 +37,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 import com.example.composeapplication.R
@@ -163,6 +161,7 @@ Scaffold(
             }
 
             // Actual product items list
+            //This will populate a grid of two items per  row by default
             items(productsState.products) { product ->
                 ProductItem(
                     product = product,
@@ -193,7 +192,6 @@ Scaffold(
 
 
 }
-
 
 
 }
@@ -441,6 +439,7 @@ private fun ProductItem(
 }
 
 //Add the categories Composable
+//added  a lazy row to display the categories from the Api
 
 @Composable
 fun Categories(categories: List<String>, viewModel: HomeViewModel) {
@@ -464,6 +463,8 @@ fun Categories(categories: List<String>, viewModel: HomeViewModel) {
                         viewModel.getProducts(viewModel.selectedCategory.value)
                     }
                     .background(
+
+                        // for  the selected items highlight in yellow color
                         if (category == viewModel.selectedCategory.value) {
                             YellowMain
                         } else {

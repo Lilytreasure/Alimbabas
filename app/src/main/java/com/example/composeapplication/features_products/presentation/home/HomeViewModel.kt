@@ -96,6 +96,7 @@ class HomeViewModel @Inject constructor(
                         _eventFlow.emit(
                             UiEvents.SnackbarEvent(
                                 message = result.message ?: "Unknown error occurred!"
+
                             )
                         )
                     }

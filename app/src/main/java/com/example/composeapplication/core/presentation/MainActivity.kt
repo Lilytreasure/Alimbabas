@@ -21,7 +21,6 @@ import com.example.composeapplication.features_products.presentation.NavGraphs
 import com.example.composeapplication.features_products.presentation.destinations.HomescreenDestination
 import com.ramcosta.composedestinations.DestinationsNavHost
 import com.ramcosta.composedestinations.rememberNavHostEngine
-import com.ramcosta.composedestinations.spec.NavGraphSpec
 import dagger.hilt.android.AndroidEntryPoint
 
 
@@ -36,6 +35,7 @@ class MainActivity : ComponentActivity() {
     //main  activity --will run by default as the entry point to the  application
     //when using the Third party libray for the navigation
     //Run the build to generate the  files
+    //Todo--Handle exceptions to avois crashes
 
 
 
