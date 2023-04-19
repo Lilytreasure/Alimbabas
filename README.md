@@ -10,5 +10,14 @@ Took me 3 days to get the application working-The day it compiled i was guarante
 
 API-https://fakestoreapi.com/
 
+ <table align="center">
+  <tr>
+    <td><img src="https://user-images.githubusercontent.com/78819932/233192223-db293059-a639-4082-86e3-467a53223c80.png" alt="Home" style="width:250px;height:500px;">
+   
+  </tr>
+  
+</table><br>
+
+
 
 
