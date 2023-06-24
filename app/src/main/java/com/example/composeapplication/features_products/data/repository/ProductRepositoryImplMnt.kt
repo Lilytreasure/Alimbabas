@@ -9,18 +9,10 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import okio.IOException
 import retrofit2.HttpException
-
-
 class ProductRepositoryImplMnt(private  val productAPIService: ProductAPIService):ProductsRepository {
     //an implementation  of the product repository
     //This class wil implement the methods in the product repository
     override suspend fun getProducts(): Flow<Resource<List<ProductList>>> = flow {
-        //logic to get the products
-    //emit  the result  from the api
-        //catch the exceptions when fetching  data from the api
-        //error loading the data \
-        //when the response takes too long to load an item ie-- exceeds a few set seconds
-        //render an error indicatin  time out
 
         emit(Resource.Loading())
         try {
@@ -34,15 +26,10 @@ class ProductRepositoryImplMnt(private  val productAPIService: ProductAPIService
         }catch (exception: HttpException){
             emit(Resource.Error("something went wrong"))
         }
-
-
     }
-
     //will fetch the product categories from the user input  on the screen
-
     override suspend fun getProductCategories(): List<String> {
         return productAPIService.getProductCategories()
-
     }
 
 }

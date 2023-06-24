@@ -16,27 +16,21 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     private val getProductsUseCase: GetProductsUseCase,
     private val getCategoriesUseCase: GetCategoriesUseCase
 
-)
-    : ViewModel() {
-    //This view model will be used to render items in the home view model
-        //view data logic
-    //The underscore  is used as an identifier  to differentiate  between the variables
+) : ViewModel() {
+    private val _selectedCategory = mutableStateOf("All")
+    val selectedCategory: State<String> = _selectedCategory
 
-        private val _selectedCategory= mutableStateOf("All")
-         val selectedCategory: State<String> = _selectedCategory
-
-         fun setCategory(value: String) {
+    fun setCategory(value: String) {
         _selectedCategory.value = value
-        }
+    }
 
-    private val _productsState = mutableStateOf(productsState())
-    val productsState: State<productsState> = _productsState
+    private val _productsState = mutableStateOf(ProductsState())
+    val productsState: State<ProductsState> = _productsState
 
     private val _categoriesState = mutableStateOf(emptyList<String>())
     val categoriesState: State<List<String>> = _categoriesState
@@ -47,7 +41,6 @@ class HomeViewModel @Inject constructor(
     fun setSearchTerm(term: String) {
         _searchTerm.value = term
     }
-
     private val _eventFlow = MutableSharedFlow<UiEvents>()
     val eventFlow: SharedFlow<UiEvents> = _eventFlow.asSharedFlow()
 
@@ -56,15 +49,11 @@ class HomeViewModel @Inject constructor(
         getCategories()
 
     }
-
-
     private fun getCategories() {
         viewModelScope.launch {
             _categoriesState.value = getCategoriesUseCase()
         }
     }
-
-
     fun getProducts(category: String) {
         viewModelScope.launch {
             getProductsUseCase().collectLatest { result ->
@@ -83,11 +72,13 @@ class HomeViewModel @Inject constructor(
                             )
                         }
                     }
+
                     is Resource.Loading -> {
                         _productsState.value = productsState.value.copy(
                             isLoading = true
                         )
                     }
+
                     is Resource.Error -> {
                         _productsState.value = productsState.value.copy(
                             isLoading = false,
@@ -96,7 +87,6 @@ class HomeViewModel @Inject constructor(
                         _eventFlow.emit(
                             UiEvents.SnackbarEvent(
                                 message = result.message ?: "Unknown error occurred!"
-
                             )
                         )
                     }
@@ -104,7 +94,4 @@ class HomeViewModel @Inject constructor(
             }
         }
     }
-
-
-
 }

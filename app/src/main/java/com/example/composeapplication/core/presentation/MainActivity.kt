@@ -24,8 +24,6 @@ import com.ramcosta.composedestinations.rememberNavHostEngine
 import dagger.hilt.android.AndroidEntryPoint
 
 
-
-
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
@@ -37,8 +35,6 @@ class MainActivity : ComponentActivity() {
     //Run the build to generate the  files
     //Todo--Handle exceptions to avois crashes
 
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -48,14 +44,10 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = Color.Gray
                 ) {
-
-
                     val navController = rememberNavController()
                     val navHostEngine = rememberNavHostEngine()
                     val newBackStackEntry by navController.currentBackStackEntryAsState()
                     val route = newBackStackEntry?.destination?.route
-
-
 
                     CustomScaffold(
                         navController = navController,
@@ -71,8 +63,6 @@ class MainActivity : ComponentActivity() {
                             )
                         }
                     }
-
-
                 }
             }
         }

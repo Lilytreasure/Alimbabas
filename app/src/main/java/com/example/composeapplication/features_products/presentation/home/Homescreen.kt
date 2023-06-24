@@ -53,150 +53,123 @@ import com.ramcosta.composedestinations.annotation.RootNavGraph
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import kotlinx.coroutines.flow.collectLatest
 
-
-//This will outline  the items as  they appear in the home screen
-//This container will populate items in a grid view state
-// This will hold the items in  the home screen
-//add a lazy column to populate  the list of items  in the products container
-
-
-
-//@SuppressLint("UnusedMaterialScaffoldPaddingParameter")
-
-//while setting the destination of the items  --run the compilatuons first to generate the files
-
-
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @RootNavGraph(start = true)
 @Destination
 @Composable
- fun Homescreen(
+fun Homescreen(
     navigator: DestinationsNavigator,
-    viewModel: HomeViewModel= hiltViewModel()
+    viewModel: HomeViewModel = hiltViewModel()
 
 ) {
-    Column(modifier = Modifier
-        .fillMaxSize()
-        .padding(0.dp)){
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(0.dp)
+    ) {
         Text(text = "Hello")
 
     }
 
+    Scaffold(
+        topBar = {
+            MyTopAppBar(viewModel)
+        },
 
+        ) {
+        val scaffoldState = rememberScaffoldState()
+        LaunchedEffect(key1 = true) {
+            viewModel.eventFlow.collectLatest { event ->
+                when (event) {
+                    is UiEvents.SnackbarEvent -> {
+                        scaffoldState.snackbarHostState.showSnackbar(
+                            message = event.message
+                        )
+                    }
 
-
-Scaffold(
-    topBar = {
-        MyTopAppBar(viewModel)
-    },
-
-
-    ) {
-    val scaffoldState = rememberScaffoldState()
-    LaunchedEffect(key1 = true) {
-        viewModel.eventFlow.collectLatest { event ->
-            when (event) {
-                is UiEvents.SnackbarEvent -> {
-                    scaffoldState.snackbarHostState.showSnackbar(
-                        message = event.message
-                    )
+                    else -> {}
                 }
-                else -> {}
             }
         }
-    }
+        //map the products in the  containers
+        //create a  container to hold the image  and the  products descriptions
+        val productsState = viewModel.productsState.value
+        val categories = viewModel.categoriesState.value
+        Box(modifier = Modifier.fillMaxSize()) {
+            LazyVerticalGrid(
+                columns = GridCells.Fixed(2),
+                contentPadding = PaddingValues(16.dp)
+            ) {
+                item(span = { GridItemSpan(2) }) {
+                    Card(
+                        elevation = 0.dp,
+                        shape = RoundedCornerShape(12.dp),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(170.dp)
+                    ) {
+                        Image(
+                            painter = rememberAsyncImagePainter(
+                                ImageRequest.Builder(LocalContext.current)
+                                    // .data(data = viewModel.bannerImageState.value)
+                                    .apply(block = fun ImageRequest.Builder.() {
+                                        placeholder(R.drawable.ic_placeholder)
+                                        crossfade(true)
+                                    }).build()
+                            ),
+                            contentScale = ContentScale.Crop,
+                            contentDescription = "top cars view "
+                        )
+                    }
 
+                } // Header for some banner Image
 
-    //map the products in the  containers
-    //create a  container to hold the image  and the  products descriptions
-
-
-    val productsState = viewModel.productsState.value
-    val categories = viewModel.categoriesState.value
-
-
-    Box(modifier = Modifier.fillMaxSize()) {
-        LazyVerticalGrid(
-            columns = GridCells.Fixed(2),
-            contentPadding = PaddingValues(16.dp)
-        ) {
-            item(span = { GridItemSpan(2) }) {
-                Card(
-                    elevation = 0.dp,
-                    shape = RoundedCornerShape(12.dp),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(170.dp)
-                ) {
-                    Image(
-                        painter = rememberAsyncImagePainter(
-                            ImageRequest.Builder(LocalContext.current)
-                               // .data(data = viewModel.bannerImageState.value)
-                                .apply(block = fun ImageRequest.Builder.() {
-                                    placeholder(R.drawable.ic_placeholder)
-                                    crossfade(true)
-                                }).build()
-                        ),
-                        contentScale = ContentScale.Crop,
-                        contentDescription = "top cars view "
-                    )
+                // Some spacer
+                item(span = { GridItemSpan(2) }) {
+                    Spacer(modifier = Modifier.height(16.dp))
                 }
 
-            } // Header for some banner Image
-
-            // Some spacer
-            item(span = { GridItemSpan(2) }) {
-                Spacer(modifier = Modifier.height(16.dp))
-            }
-
-            item(span = { GridItemSpan(2) }) {
+                item(span = { GridItemSpan(2) }) {
 //The  categories will  be on a lazy horizontal row
-                Categories(categories = categories, viewModel = viewModel)
+                    Categories(categories = categories, viewModel = viewModel)
 
-            } // Header with a lazyRow for product categories
+                } // Header with a lazyRow for product categories
 
-            // Some spacer
-            item(span = { GridItemSpan(2) }) {
-                Spacer(modifier = Modifier.height(12.dp))
+                // Some spacer
+                item(span = { GridItemSpan(2) }) {
+                    Spacer(modifier = Modifier.height(12.dp))
+                }
+
+                // Actual product items list
+                //This will populate a grid of two items per  row by default
+                items(productsState.products) { product ->
+                    ProductItem(
+                        product = product,
+                        navigator = navigator,
+                        modifier = Modifier
+                            .width(150.dp)
+                    )
+                }
             }
 
-            // Actual product items list
-            //This will populate a grid of two items per  row by default
-            items(productsState.products) { product ->
-                ProductItem(
-                    product = product,
-                    navigator = navigator,
-                    modifier = Modifier
-                        .width(150.dp)
+            if (productsState.isLoading) {
+                LoadingAnimation(
+                    modifier = Modifier.align(Alignment.Center),
+                    circleSize = 16.dp,
                 )
             }
-        }
 
-        if (productsState.isLoading) {
-            LoadingAnimation(
-                modifier = Modifier.align(Alignment.Center),
-                circleSize = 16.dp,
+            if (productsState.error != null) Text(
+                textAlign = TextAlign.Center,
+                modifier = Modifier
+                    .align(Alignment.Center)
+                    .padding(16.dp),
+                text = productsState.error,
+                color = Color.Red
             )
         }
-
-        if (productsState.error != null) Text(
-            textAlign = TextAlign.Center,
-            modifier = Modifier
-                .align(Alignment.Center)
-                .padding(16.dp),
-            text = productsState.error,
-            color = Color.Red
-        )
     }
-
-
-
 }
-
-
-}
-
-
 
 //This will appear at the top of the application
 @Composable
@@ -206,7 +179,8 @@ fun MyTopAppBar(
     Column(
         Modifier
             .fillMaxWidth()
-            .padding(12.dp), /*horizontalAlignment = Alignment.CenterHorizontally*/
+            .padding(12.dp),
+        /*horizontalAlignment = Alignment.CenterHorizontally*/
     ) {
         Row(
             Modifier
@@ -323,14 +297,10 @@ fun MyTopAppBar(
         }
     }
 }
-//a  Composable  function that holds the products
-//This  will be rendered in  the  grid
-//will set  the items  to 2 by default
-
 
 @Composable
 private fun ProductItem(
-    product:ProductList,
+    product: ProductList,
     navigator: DestinationsNavigator,
     modifier: Modifier = Modifier
 ) {
@@ -434,7 +404,6 @@ private fun ProductItem(
 
             Spacer(modifier = Modifier.height(12.dp))
         }
-
     }
 }
 
@@ -479,33 +448,11 @@ fun Categories(categories: List<String>, viewModel: HomeViewModel) {
     }
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 @Preview(showBackground = true)
 @Composable
 fun DefaultPreview() {
     ComposeApplicationTheme {
-        //add custom items to render  the home screen
-//        ProductItem(product = ProductList(2,"barsoap",22.0,"sweater","warm","", Rating(2.0,5)),
-//            )
 
-
-
-      //Homescreen()
     }
 }
 

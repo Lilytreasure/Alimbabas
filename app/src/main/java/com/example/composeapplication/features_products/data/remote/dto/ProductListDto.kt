@@ -1,7 +1,5 @@
 package com.example.composeapplication.features_products.data.remote.dto
 
-import com.example.composeapplication.features_products.domain.model.Category
-import com.example.composeapplication.features_products.domain.model.Rating
 import com.google.gson.annotations.SerializedName
 
 data class ProductListDto(

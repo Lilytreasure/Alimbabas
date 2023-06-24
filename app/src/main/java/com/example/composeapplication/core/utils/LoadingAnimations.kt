@@ -19,7 +19,6 @@ import kotlinx.coroutines.delay
 
 //This will  show an animations when products are loading in the view
 
-
 @Composable
 fun LoadingAnimation(
     modifier: Modifier = Modifier,
