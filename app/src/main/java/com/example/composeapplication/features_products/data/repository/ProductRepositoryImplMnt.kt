@@ -10,8 +10,6 @@ import kotlinx.coroutines.flow.flow
 import okio.IOException
 import retrofit2.HttpException
 class ProductRepositoryImplMnt(private  val productAPIService: ProductAPIService):ProductsRepository {
-    //an implementation  of the product repository
-    //This class wil implement the methods in the product repository
     override suspend fun getProducts(): Flow<Resource<List<ProductList>>> = flow {
 
         emit(Resource.Loading())

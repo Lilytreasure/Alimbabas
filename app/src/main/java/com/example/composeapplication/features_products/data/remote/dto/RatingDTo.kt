@@ -7,5 +7,4 @@ data class RatingDTo(
     val rate: Double,
 @SerializedName("count")
     val count: Long
-
 )

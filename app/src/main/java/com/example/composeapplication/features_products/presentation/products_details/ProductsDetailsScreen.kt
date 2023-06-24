@@ -71,7 +71,6 @@ fun ProductsDetailsScreen(
                 )
 
             }
-            // Name of  the product
             Text(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -108,7 +107,6 @@ fun ProductsDetailsScreen(
     }
 }
 
-//create a custom top  app bar
 @Composable
 fun ProductsTopBar() {
 

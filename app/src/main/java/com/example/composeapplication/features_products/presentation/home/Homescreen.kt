@@ -122,7 +122,7 @@ fun Homescreen(
                         )
                     }
 
-                } // Header for some banner Image
+                }
 
                 // Some spacer
                 item(span = { GridItemSpan(2) }) {
@@ -130,12 +130,9 @@ fun Homescreen(
                 }
 
                 item(span = { GridItemSpan(2) }) {
-//The  categories will  be on a lazy horizontal row
                     Categories(categories = categories, viewModel = viewModel)
 
-                } // Header with a lazyRow for product categories
-
-                // Some spacer
+                }
                 item(span = { GridItemSpan(2) }) {
                     Spacer(modifier = Modifier.height(12.dp))
                 }
@@ -171,7 +168,6 @@ fun Homescreen(
     }
 }
 
-//This will appear at the top of the application
 @Composable
 fun MyTopAppBar(
     viewModel: HomeViewModel
@@ -180,7 +176,6 @@ fun MyTopAppBar(
         Modifier
             .fillMaxWidth()
             .padding(12.dp),
-        /*horizontalAlignment = Alignment.CenterHorizontally*/
     ) {
         Row(
             Modifier
@@ -407,9 +402,6 @@ private fun ProductItem(
     }
 }
 
-//Add the categories Composable
-//added  a lazy row to display the categories from the Api
-
 @Composable
 fun Categories(categories: List<String>, viewModel: HomeViewModel) {
     LazyRow(
@@ -447,7 +439,6 @@ fun Categories(categories: List<String>, viewModel: HomeViewModel) {
         }
     }
 }
-
 @Preview(showBackground = true)
 @Composable
 fun DefaultPreview() {
